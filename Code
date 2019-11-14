@@ -1,0 +1,135 @@
+#display_board
+
+turn = "X"
+game_still_on = True
+winner = None
+position = None
+wrong_position = True
+board = ["-","-","-","-","-","-","-","-","-"]
+board_position = [0,1,2,3,4,5,6,7,8]
+def display_board():
+    print( board[0] + "|" + board[1] + "|" + board[2])
+    print( board[3] + "|" + board[4] + "|" + board[5])
+    print( board[6] + "|" + board[7] + "|" + board[8])
+
+def change_turn():
+    global turn
+    if turn == "X":
+        turn = "0"
+    else:
+        turn = "X"
+
+def play():
+    global board;
+    global game_still_on
+    if game_still_on == True:
+        display_board()
+        user_input()
+    else:
+        if (winner == None):
+            print("The Game has Draw. Better Luck Next Time!")
+            ask_for_play = input("Do you want to play Again. Press Y for Yes and N for No!")
+            ask_for_play = ask_for_play.lower()
+            if ask_for_play == "y":
+                board = ["-","-","-","-","-","-","-","-","-"]
+                game_still_on = True
+                play()
+
+        else:
+            display_board()
+            print("Congratulation! " + str(winner) + " has won the Game.")
+            ask_for_play = input("Do you want to play Again. Press Y for Yes and N for No!")
+            ask_for_play = ask_for_play.lower()
+            if ask_for_play == "y":
+                board = ["-","-","-","-","-","-","-","-","-"]
+                game_still_on = True
+                play()
+
+
+
+
+
+def user_input():
+    global position
+    global wrong_position
+    position = input("Enter the position You want. " + "Its " + turn + " turn: ")
+    position = int(position) - 1
+    check_position()
+    if (wrong_position == True):
+        board[position] = turn
+        check_if_draw()
+        check_if_win()
+        change_turn()
+        play()
+    else:
+        play()
+
+
+def check_if_draw():
+    global game_still_on
+    if "-" not in board:
+        game_still_on = False
+    else:
+        game_still_on = True
+
+
+
+def check_if_win():
+    check_rows()
+    check_columns()
+    check_diagonals()
+
+def check_rows():
+    global game_still_on
+    global winner
+    if (board[0] == board[1] == board[2] != "-"):
+        game_still_on = False
+        winner = board[0]
+    elif (board[3] == board[4] == board[5] != "-"):
+        game_still_on = False
+        winner = board[3]
+    elif (board[6] == board[7] == board[8] != "-"):
+        game_still_on = False
+        winner = board[6]
+
+
+def check_columns():
+    global game_still_on
+    global winner
+    if (board[0] == board[3] == board[6] != "-"):
+        game_still_on = False
+        winner = board[0]
+    elif (board[1] == board[4] == board[7] != "-"):
+        game_still_on = False
+        winner = board[1]
+    elif (board[2] == board[5] == board[8] != "-"):
+        game_still_on = False
+        winner = board[2]
+
+
+
+def check_diagonals():
+    global game_still_on
+    global winner
+    if (board[0] == board[4] == board[8] != "-"):
+        game_still_on = False
+        winner = board[0]
+    elif(board[2] == board[4] == board[6] != "-"):
+        game_still_on = False
+        winner = board[2]
+
+def check_position():
+    global position
+    global wrong_position
+    global board_position
+    if (position not in board_position):
+        print("You have entered an Invalid Value, Choose 1 - 9!")
+        wrong_position = False
+    elif (board[position] != "-"):
+        print("This Position has been filled Already. Choose any Other Position.")
+        wrong_position = False
+    else:
+        wrong_position = True
+
+
+play()
